@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SHERPA Assets — Banco de Bogotá</title>
+<style>
+  @font-face {
+    font-family: 'Kiffo BDB';
+    src: url('fuentes/kiffo-bdb/KiffoBDB-Regular.woff2') format('woff2');
+    font-weight: 400; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'Kiffo BDB';
+    src: url('fuentes/kiffo-bdb/KiffoBDB-Medium.woff2') format('woff2');
+    font-weight: 500; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'Kiffo BDB';
+    src: url('fuentes/kiffo-bdb/KiffoBDB-SemiBold.woff2') format('woff2');
+    font-weight: 600; font-style: normal; font-display: swap;
+  }
+
+  :root{
+    --navy: #0B1F3D;
+    --navy-soft: #14294D;
+    --cream: #F5F0E4;
+    --card: #FFFFFF;
+    --ink: #23262E;
+    --ink-soft: #6B6F7B;
+    --gold: #C9922B;
+    --gold-soft: #F1E2BC;
+    --line: #E7E0CE;
+    --radius: 18px;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{
+    margin:0;
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Kiffo BDB', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a{ color: inherit; }
+
+  /* ---------- top bar ---------- */
+  .topbar{
+    position: sticky; top: 0; z-index: 40;
+    background: var(--cream);
+    padding: 18px 24px 10px;
+  }
+  .nav-pill{
+    max-width: 1180px; margin: 0 auto;
+    background: var(--navy);
+    border-radius: 999px;
+    display:flex; align-items:center; gap:18px;
+    padding: 10px 10px 10px 22px;
+    box-shadow: 0 10px 30px -12px rgba(11,31,61,0.45);
+  }
+  .brand{
+    color: #fff; font-weight: 600; font-size: 15px;
+    letter-spacing: 0.2px; white-space:nowrap;
+    display:flex; align-items:center; gap:8px;
+  }
+  .brand .dot{ width:7px; height:7px; border-radius:50%; background: var(--gold); display:inline-block; }
+  .search-wrap{ flex:1; position:relative; }
+  .search-wrap input{
+    width:100%;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.14);
+    color:#fff;
+    padding: 10px 16px 10px 38px;
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+  }
+  .search-wrap input::placeholder{ color: rgba(255,255,255,0.55); }
+  .search-wrap input:focus{ border-color: var(--gold); background: rgba(255,255,255,0.13); }
+  .search-icon{
+    position:absolute; left:14px; top:50%; transform:translateY(-50%);
+    width:14px; height:14px; opacity:0.6;
+  }
+  .count-pill{
+    background: rgba(255,255,255,0.08);
+    color:#fff;
+    font-size: 12px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    white-space:nowrap;
+    font-family: var(--mono);
+  }
+
+  .tabs{
+    max-width: 1180px; margin: 14px auto 0;
+    display:flex; gap:8px; padding: 0 4px;
+  }
+  .tab{
+    border:none; cursor:pointer;
+    background: transparent;
+    color: var(--navy);
+    font-family: inherit; font-weight: 500; font-size: 14px;
+    padding: 8px 18px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+  }
+  .tab.active{
+    background: var(--navy); color:#fff;
+  }
+  .tab:not(.active):hover{ border-color: var(--line); background: rgba(11,31,61,0.05); }
+
+  main{ max-width: 1180px; margin: 0 auto; padding: 22px 24px 80px; }
+
+  .section{ display:none; }
+  .section.active{ display:block; }
+
+  .chips{ display:flex; flex-wrap:wrap; gap:8px; margin: 4px 0 22px; }
+  .chip{
+    border:1px solid var(--line);
+    background: #fff;
+    color: var(--ink-soft);
+    font-family: inherit; font-size: 13px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    cursor:pointer;
+  }
+  .chip.active{ background: var(--gold-soft); border-color: var(--gold); color:#5C4110; font-weight:500; }
+
+  .grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+  }
+
+  .card{
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 16px 12px 12px;
+    display:flex; flex-direction:column; align-items:center;
+    gap: 10px;
+    transition: box-shadow .15s ease, transform .15s ease;
+  }
+  .card:hover{ box-shadow: 0 12px 24px -14px rgba(11,31,61,0.28); transform: translateY(-2px); }
+
+  .swatch{
+    width:100%; height:64px;
+    display:flex; align-items:center; justify-content:center;
+    background:
+      linear-gradient(45deg, #fafafa 25%, transparent 25%),
+      linear-gradient(-45deg, #fafafa 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #fafafa 75%),
+      linear-gradient(-45deg, transparent 75%, #fafafa 75%);
+    background-size: 12px 12px;
+    background-position: 0 0, 0 6px, 6px -6px, -6px 0px;
+    background-color: #fff;
+    border-radius: 10px;
+  }
+  .swatch img{ max-width: 70%; max-height: 70%; }
+  .swatch.dark{ background-color: var(--navy); background-image:none; }
+
+  .fname{
+    font-family: var(--mono); font-size: 11px; color: var(--ink-soft);
+    text-align:center; word-break: break-word; line-height:1.35;
+    min-height: 28px;
+  }
+
+  .copy-btn{
+    width:100%;
+    border:none; cursor:pointer;
+    background: var(--navy-soft);
+    color:#fff;
+    font-family: inherit; font-size: 12px; font-weight:500;
+    padding: 8px 10px;
+    border-radius: 999px;
+    transition: background .15s ease;
+  }
+  .copy-btn:hover{ background: var(--navy); }
+  .copy-btn.copied{ background: var(--gold); color: #3D2C08; }
+
+  /* fonts section */
+  .font-row{
+    background:#fff; border:1px solid var(--line); border-radius: var(--radius);
+    padding: 22px 26px; margin-bottom: 12px;
+    display:flex; align-items:center; justify-content:space-between; gap:20px;
+    flex-wrap: wrap;
+  }
+  .font-sample{ font-size: 34px; line-height:1; color: var(--navy); }
+  .font-meta{ display:flex; flex-direction:column; gap:4px; min-width:140px; }
+  .font-meta .w{ font-family: var(--mono); font-size: 12px; color: var(--ink-soft); }
+  .font-meta .n{ font-weight:600; font-size:14px; }
+
+  .css-block{
+    background: var(--navy); color:#E8ECF5;
+    border-radius: var(--radius);
+    padding: 20px 22px; margin-top: 18px;
+    font-family: var(--mono); font-size: 12.5px; line-height:1.7;
+    overflow-x:auto;
+    position:relative;
+  }
+  .css-block .copy-btn{ position:absolute; top:14px; right:14px; width:auto; padding: 7px 16px; }
+
+  .empty{
+    text-align:center; color: var(--ink-soft); padding: 60px 0; font-size:14px;
+  }
+
+  footer{
+    max-width:1180px; margin: 0 auto; padding: 20px 24px 50px;
+    color: var(--ink-soft); font-size:12px; text-align:center;
+  }
+
+  @media (max-width: 640px){
+    .nav-pill{ flex-wrap:wrap; border-radius: 22px; padding:14px; }
+    .brand{ order:1; }
+    .count-pill{ order:2; }
+    .search-wrap{ order:3; flex-basis:100%; }
+    .grid{ grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="nav-pill">
+    <div class="brand"><span class="dot"></span> SHERPA Assets</div>
+    <div class="search-wrap">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="search" type="text" placeholder="Buscar un asset, ej. bateria, isotipo, whatsapp…">
+    </div>
+    <div class="count-pill" id="resultCount">— assets</div>
+  </div>
+  <div class="tabs" id="tabs">
+    <button class="tab active" data-section="logos">Logos</button>
+    <button class="tab" data-section="iconos">Iconos</button>
+    <button class="tab" data-section="fuentes">Tipografía</button>
+  </div>
+</div>
+
+<main>
+  <section class="section active" id="section-logos">
+    <div class="grid" id="grid-logos"></div>
+  </section>
+
+  <section class="section" id="section-iconos">
+    <div class="chips" id="chips-iconos"></div>
+    <div class="grid" id="grid-iconos"></div>
+    <div class="empty" id="empty-iconos" style="display:none;">No hay resultados para esa búsqueda.</div>
+  </section>
+
+  <section class="section" id="section-fuentes">
+    <div id="font-rows"></div>
+    <div class="css-block">
+      <button class="copy-btn" data-copy="css">Copiar CSS</button>
+      <pre id="css-preview" style="margin:0; white-space:pre-wrap;"></pre>
+    </div>
+  </section>
+</main>
+
+<footer>SHERPA Design System · Banco de Bogotá · Assets servidos vía GitHub Pages</footer>
+
+<script>
+const BASE = new URL('.', window.location.href).href;
+
+fetch('manifest.json').then(r => r.json()).then(init);
+
+function init(data){
+  renderLogos(data.logos);
+  renderIcons(data.icons);
+  renderFonts(data.fonts);
+  setupTabs();
+  setupSearch(data);
+  updateCount('logos', data.logos.length);
+}
+
+function url(path){ return BASE + path; }
+
+function copy(text, btn){
+  navigator.clipboard.writeText(text).then(() => {
+    const original = btn.textContent;
+    btn.textContent = '✓ ¡Copiado!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = original; btn.classList.remove('copied'); }, 1400);
+  });
+}
+
+function makeCard(label, fullPath, dark){
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.dataset.name = label.toLowerCase();
+
+  const swatch = document.createElement('div');
+  swatch.className = 'swatch' + (dark ? ' dark' : '');
+  const img = document.createElement('img');
+  img.src = url(fullPath);
+  img.loading = 'lazy';
+  img.alt = label;
+  swatch.appendChild(img);
+
+  const name = document.createElement('div');
+  name.className = 'fname';
+  name.textContent = label;
+
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+  btn.textContent = 'Copiar URL';
+  btn.onclick = () => copy(url(fullPath), btn);
+
+  card.append(swatch, name, btn);
+  return card;
+}
+
+function renderLogos(logos){
+  const grid = document.getElementById('grid-logos');
+  logos.forEach(f => {
+    const dark = f.includes('-dark');
+    grid.appendChild(makeCard(f, 'logos/' + f, dark));
+  });
+}
+
+let iconsData = {};
+function renderIcons(icons){
+  iconsData = icons;
+  const chipsWrap = document.getElementById('chips-iconos');
+  const cats = Object.keys(icons);
+
+  const allChip = document.createElement('button');
+  allChip.className = 'chip active';
+  allChip.textContent = 'Todas';
+  allChip.dataset.cat = '__all__';
+  chipsWrap.appendChild(allChip);
+
+  cats.forEach(cat => {
+    const chip = document.createElement('button');
+    chip.className = 'chip';
+    chip.textContent = `${cat} (${icons[cat].length})`;
+    chip.dataset.cat = cat;
+    chipsWrap.appendChild(chip);
+  });
+
+  chipsWrap.addEventListener('click', e => {
+    if(e.target.classList.contains('chip')){
+      chipsWrap.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      e.target.classList.add('active');
+      drawIcons(e.target.dataset.cat, document.getElementById('search').value);
+    }
+  });
+
+  drawIcons('__all__', '');
+}
+
+function drawIcons(cat, query){
+  const grid = document.getElementById('grid-iconos');
+  const empty = document.getElementById('empty-iconos');
+  grid.innerHTML = '';
+  const q = query.trim().toLowerCase();
+  let total = 0;
+
+  const cats = cat === '__all__' ? Object.keys(iconsData) : [cat];
+  cats.forEach(c => {
+    (iconsData[c] || []).forEach(f => {
+      if(q && !f.toLowerCase().includes(q) && !c.toLowerCase().includes(q)) return;
+      grid.appendChild(makeCard(f, `iconos/${c}/${f}`, false));
+      total++;
+    });
+  });
+
+  empty.style.display = total === 0 ? 'block' : 'none';
+  updateCount('iconos', total);
+}
+
+function renderFonts(fonts){
+  const wrap = document.getElementById('font-rows');
+  fonts.forEach(f => {
+    const row = document.createElement('div');
+    row.className = 'font-row';
+    row.innerHTML = `
+      <div class="font-sample" style="font-weight:${f.weight};">Kiffo BDB — Aa Bb Cc 123</div>
+      <div class="font-meta">
+        <span class="n">${f.name}</span>
+        <span class="w">font-weight: ${f.weight}</span>
+      </div>
+    `;
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.style.width = 'auto';
+    btn.textContent = 'Copiar URL .woff2';
+    btn.onclick = () => copy(url(`fuentes/kiffo-bdb/KiffoBDB-${f.name}.woff2`), btn);
+    row.appendChild(btn);
+    wrap.appendChild(row);
+  });
+
+  const css = `@font-face {
+  font-family: 'Kiffo BDB';
+  src: url('${url("fuentes/kiffo-bdb/KiffoBDB-Regular.woff2")}') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+/* Repite este bloque por cada peso — ver fuentes/kiffo-bdb/font-face.css */`;
+  document.getElementById('css-preview').textContent = css;
+  document.querySelector('.css-block .copy-btn').onclick = (e) => copy(css, e.target);
+}
+
+function setupTabs(){
+  document.getElementById('tabs').addEventListener('click', e => {
+    if(!e.target.classList.contains('tab')) return;
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    e.target.classList.add('active');
+    const target = e.target.dataset.section;
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById('section-' + target).classList.add('active');
+    document.getElementById('search').value = '';
+    if(target === 'logos') updateCount('logos', document.querySelectorAll('#grid-logos .card').length);
+    if(target === 'iconos') drawIcons('__all__', '');
+    if(target === 'fuentes') document.getElementById('resultCount').textContent = '6 pesos';
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    const allChip = document.querySelector('.chip[data-cat="__all__"]');
+    if(allChip) allChip.classList.add('active');
+  });
+}
+
+function setupSearch(data){
+  document.getElementById('search').addEventListener('input', e => {
+    const q = e.target.value.toLowerCase().trim();
+    const activeSection = document.querySelector('.section.active').id;
+
+    if(activeSection === 'section-logos'){
+      let visible = 0;
+      document.querySelectorAll('#grid-logos .card').forEach(card => {
+        const match = card.dataset.name.includes(q);
+        card.style.display = match ? '' : 'none';
+        if(match) visible++;
+      });
+      updateCount('logos', visible);
+    }
+
+    if(activeSection === 'section-iconos'){
+      const activeChip = document.querySelector('.chip.active');
+      drawIcons(activeChip ? activeChip.dataset.cat : '__all__', q);
+    }
+  });
+}
+
+function updateCount(section, n){
+  const labels = { logos: 'logos', iconos: 'iconos', fuentes: 'pesos' };
+  document.getElementById('resultCount').textContent = `${n} ${labels[section] || ''}`;
+}
+</script>
+
+</body>
+</html>
